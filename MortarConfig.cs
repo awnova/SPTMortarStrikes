@@ -50,7 +50,7 @@ namespace MortarStrikes
         public float MaxDistanceFromTarget { get; set; } = 200f;
 
         [JsonProperty("playerTargetingWeight")]
-        public int PlayerTargetingWeight { get; set; } = 0.3;
+        public int PlayerTargetingWeight { get; set; } = 30;
 
         [JsonProperty("_comment_playerTargetingWeight")]
         public string _c16 { get; set; } = "0 = evenly random between all bots and players. 100 = always targets a player. Values in between give players proportionally higher chance of being selected";

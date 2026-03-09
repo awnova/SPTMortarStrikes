@@ -18,6 +18,7 @@ namespace MortarStrikes
         private static bool _packetRegistrationAttempted;
         private static Assembly _fikaAsm;
         private static PropertyInfo _isServerProp;
+        private static PropertyInfo _isInRaidProp;
         private static PropertyInfo _networkManagerSingletonProp;
         private static Type _packetType;
         private static FieldInfo _fxField;
@@ -46,6 +47,8 @@ namespace MortarStrikes
 
                 var utilsType = _fikaAsm.GetTypes()
                     .FirstOrDefault(t => t.Name == "FikaBackendUtils");
+                var globalsType = _fikaAsm.GetTypes()
+                    .FirstOrDefault(t => t.Name == "FikaGlobals");
 
                 if (utilsType != null)
                 {
@@ -59,6 +62,9 @@ namespace MortarStrikes
                                 .Select(p => p.Name)));
                     }
                 }
+
+                if (globalsType != null)
+                    _isInRaidProp = globalsType.GetProperty("IsInRaid", BindingFlags.Public | BindingFlags.Static);
 
                 var ifikaType = FindTypeInAllAssemblies("IFikaNetworkManager");
                 if (ifikaType != null)
@@ -93,6 +99,22 @@ namespace MortarStrikes
                 catch { }
             }
             return true;
+        }
+
+        /// <summary>
+        /// When FIKA is present (including headless), use FikaGlobals.IsInRaid instead of MainPlayer.
+        /// Returns true if we got a value from FIKA; false means use the caller's fallback (GameWorld+MainPlayer).
+        /// </summary>
+        public static bool TryGetFikaIsInRaid(out bool isInRaid)
+        {
+            isInRaid = false;
+            if (!_fikaAvailable || _isInRaidProp == null) return false;
+            try
+            {
+                isInRaid = (bool)_isInRaidProp.GetValue(null);
+                return true;
+            }
+            catch { return false; }
         }
 
         public static void TryRegisterPacket()

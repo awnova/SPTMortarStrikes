@@ -320,7 +320,16 @@ namespace MortarStrikes
 
         private bool SpawnBarrage(Vector3 position)
         {
-            if (_startShellingMethod == null) { Log.LogError("[Mortar] No artillery!"); return false; }
+            if (_startShellingMethod == null)
+            {
+                Log.LogError("[Mortar] SpawnBarrage FAILED: _startShellingMethod is null (artillery not discovered)");
+                return false;
+            }
+            if (_shellingController == null)
+            {
+                Log.LogError("[Mortar] SpawnBarrage FAILED: _shellingController is null");
+                return false;
+            }
             try
             {
                 _startShellingMethod.Invoke(_shellingController, new object[] { position });
@@ -329,7 +338,7 @@ namespace MortarStrikes
             }
             catch (Exception ex)
             {
-                Log.LogError($"[Mortar] Artillery FAILED: {ex.InnerException?.Message ?? ex.Message}");
+                Log.LogError($"[Mortar] SpawnBarrage FAILED: {ex.InnerException?.Message ?? ex.Message}\n{ex.StackTrace}");
                 return false;
             }
         }
@@ -618,7 +627,14 @@ namespace MortarStrikes
             var gw = Singleton<GameWorld>.Instance;
             if (gw == null) yield break;
             var alive = gw.AllAlivePlayersList;
-            if (alive == null || alive.Count == 0) yield break;
+            if (alive == null) yield break;
+            for (int waitRetry = 0; alive.Count == 0 && Plugin.IsInRaid() && waitRetry < 4; waitRetry++)
+            {
+                yield return new WaitForSeconds(30f);
+                alive = gw.AllAlivePlayersList;
+                if (alive == null) yield break;
+            }
+            if (alive.Count == 0) yield break;
 
             Player target = null;
             int weight = Math.Max(0, Math.Min(100, Cfg.PlayerTargetingWeight));
@@ -753,6 +769,7 @@ namespace MortarStrikes
             yield return new WaitForSeconds(delay);
 
             if (!Plugin.IsInRaid()) yield break;
+
             yield return StartCoroutine(ExecuteStrike(withSiren: true));
 
             while (Cfg.AllowMultipleStrikes && _strikesThisRaid < Cfg.MaxStrikesPerRaid && Plugin.IsInRaid())

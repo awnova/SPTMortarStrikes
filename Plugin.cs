@@ -52,6 +52,9 @@ namespace MortarStrikes
 
         public static bool IsInRaid()
         {
+            // When FIKA is present (including headless), use FikaGlobals.IsInRaid—MainPlayer may be null or set late on headless
+            if (FikaSync.TryGetFikaIsInRaid(out bool fikaResult))
+                return fikaResult;
             var gw = Singleton<GameWorld>.Instance;
             return gw != null && gw.MainPlayer != null;
         }
