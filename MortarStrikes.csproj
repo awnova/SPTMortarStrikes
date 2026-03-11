@@ -6,40 +6,74 @@
     <RootNamespace>MortarStrikes</RootNamespace>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
-    <BuildRoot>$(MSBuildThisFileDirectory)..\BringMeToLifeMod\Build</BuildRoot>
-    <CoreRefDir>$(BuildRoot)\Lib\Fika-Headless-1.4.11\References\</CoreRefDir>
-    <BepInExCoreDir>$(BuildRoot)\Lib\spt-4.0.12\static-assets-csharp\BepInEx\core\</BepInExCoreDir>
-    <DecompLibDir>$(BuildRoot)\Decomp\Assembly-CSharp\lib\</DecompLibDir>
+    <SPTPath>C:\SPT</SPTPath>
+    <ManagedPath>$(SPTPath)\EscapeFromTarkov_Data\Managed</ManagedPath>
+    <BepInExPath>$(SPTPath)\BepInEx</BepInExPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp" HintPath="$(CoreRefDir)hollowed.dll" Private="false" />
-    <Reference Include="Comfort" HintPath="$(CoreRefDir)Comfort.dll" Private="false" />
-    <Reference Include="Newtonsoft.Json" HintPath="$(CoreRefDir)Newtonsoft.Json.dll" Private="false" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ManagedPath)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedPath)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(ManagedPath)\UnityEngine.AudioModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(ManagedPath)\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ManagedPath)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(ManagedPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Comfort">
+      <HintPath>$(ManagedPath)\Comfort.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(ManagedPath)\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="UnityEngine" HintPath="$(CoreRefDir)UnityEngine.dll" Private="false" />
-    <Reference Include="UnityEngine.CoreModule" HintPath="$(DecompLibDir)UnityEngine.CoreModule.dll" Private="false" />
-    <Reference Include="UnityEngine.AudioModule" HintPath="$(DecompLibDir)UnityEngine.AudioModule.dll" Private="false" />
-    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(DecompLibDir)UnityEngine.PhysicsModule.dll" Private="false" />
-    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(DecompLibDir)UnityEngine.IMGUIModule.dll" Private="false" />
-    <Reference Include="UnityEngine.ParticleSystemModule" HintPath="$(DecompLibDir)UnityEngine.ParticleSystemModule.dll" Private="false" />
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExPath)\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="BepInEx" HintPath="$(BepInExCoreDir)BepInEx.dll" Private="false" />
-    <Reference Include="0Harmony" HintPath="$(BepInExCoreDir)0Harmony.dll" Private="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="spt-reflection" HintPath="$(CoreRefDir)spt-reflection.dll" Private="false" />
-    <Reference Include="spt-common" HintPath="$(CoreRefDir)spt-common.dll" Private="false" />
+    <Reference Include="spt-reflection">
+      <HintPath>$(BepInExPath)\plugins\spt\spt-reflection.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="spt-common">
+      <HintPath>$(BepInExPath)\plugins\spt\spt-common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>
